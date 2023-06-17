@@ -60,3 +60,20 @@ export const transferBalance = async (
 	await bank.updateOne({ id: id2 }, { $inc: { balance: amount } })
 	return true
 }
+
+type LeaderboardEntry = {
+	id: Snowflake
+	balance: number
+}
+
+// function to get the leaderboard
+export const getLeaderboard = async (
+	amount?: number
+): Promise<LeaderboardEntry[]> => {
+	const leaderboard = await bank
+		.find<LeaderboardEntry>({})
+		.sort({ balance: -1 })
+		.toArray()
+	// return only the top n entries
+	return leaderboard ? leaderboard.slice(0, amount || 10) : []
+}

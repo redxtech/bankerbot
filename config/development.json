@@ -1,5 +1,8 @@
 {
 	"db": {
 		"url": "mongodb://bankerbot:bankerbot@localhost:27017"
+	},
+	"currency": {
+		"name": "<:cassiecoin:1116504450559922347>"
 	}
 }
