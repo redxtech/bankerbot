@@ -19,6 +19,7 @@
 	"dependencies": {
 		"chalk": "^5.2.0",
 		"convict": "^6.2.4",
+		"discord.js": "^14.11.0",
 		"fejl": "^3.0.1",
 		"mongodb": "^5.6.0",
 		"tslog": "^4.8.2"
