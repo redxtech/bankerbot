@@ -1,0 +1,41 @@
+{
+	"name": "bankerbot",
+	"version": "1.0.0",
+	"description": "simple economy and gambling bot for discord",
+	"main": "src/main.ts",
+	"repository": "https://github.com/redxtech/bankerbot.git",
+	"author": "Gabe Dunn <gabe@sent.at>",
+	"license": "MIT",
+	"scripts": {
+		"start": "node ./dist/main.js",
+		"build": "node build.mjs",
+		"dev": "tsx watch src/main.ts",
+		"lint": "eslint src",
+		"lint:fix": "npm run lint -- --fix",
+		"prettier": "prettier src --check",
+		"prettier:fix": "npm run prettier -- --write",
+		"format": "npm run prettier:fix && npm run lint:fix"
+	},
+	"dependencies": {
+		"chalk": "^5.2.0",
+		"convict": "^6.2.4",
+		"fejl": "^3.0.1",
+		"mongodb": "^5.6.0",
+		"tslog": "^4.8.2"
+	},
+	"devDependencies": {
+		"@akrc/esbuild-plugin-clean": "^0.1.3",
+		"@jgoz/esbuild-plugin-typecheck": "^3.0.2",
+		"@tsconfig/node20": "^1.0.1",
+		"@types/convict": "^6.1.2",
+		"@types/node": "^20.2.5",
+		"@typescript-eslint/eslint-plugin": "^5.59.9",
+		"@typescript-eslint/parser": "^5.59.9",
+		"esbuild": "^0.17.19",
+		"eslint": "^8.42.0",
+		"eslint-config-prettier": "^8.8.0",
+		"prettier": "2.8.8",
+		"tsx": "^3.12.7",
+		"typescript": "^5.1.3"
+	}
+}

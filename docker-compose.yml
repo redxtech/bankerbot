@@ -1,0 +1,24 @@
+version: '3.9'
+services:
+  pingbot:
+    build: ./
+    container_name: bankerbot
+    restart: unless-stopped
+    environment:
+      DB_URL: mongodb://bankerbot:bankerbot@bankerbot_mongo:27017
+    volumes:
+      - ./config:/app/bankerbot/config
+  db:
+    image: docker.io/mongo
+    container_name: bankerbot_mongo
+    restart: always
+    environment:
+      # default password for the database.
+      # change it before you actually use it though.
+      # you will also need to update the DB_URL above.
+      MONGO_INITDB_ROOT_USERNAME: bankerbot
+      MONGO_INITDB_ROOT_PASSWORD: bankerbot
+    ports:
+      - 27017:27017
+    volumes:
+      - ./dbmount:/data/db

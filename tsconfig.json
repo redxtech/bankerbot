@@ -1,0 +1,17 @@
+{
+  "extends": "@tsconfig/node20/tsconfig.json",
+  "compilerOptions": {
+		"lib": ["ES2023", "DOM"],                                      /* Specify a set of bundled library declaration files that describe the target runtime environment. */
+		"baseUrl": "src",
+		"paths": {
+			"@config": ["config.ts"],
+			"@errors": ["errors.ts"],
+			"@logger": ["logger.ts"]
+		},
+		"resolveJsonModule": true,
+		"outDir": "dist",
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitAny": true,
+		"skipLibCheck": true
+  }
+}
