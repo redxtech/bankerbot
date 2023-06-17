@@ -37,12 +37,12 @@ export const addBalance = async (
 	amount: number
 ): Promise<number> => {
 	const user = await bank.findOne({ id })
-	if (!user) {
+	if (!user || !id) {
 		await bank.insertOne({ id, balance: amount })
 		return amount
 	} else {
 		await bank.updateOne({ id }, { $inc: { balance: amount } })
-		return user.balance + amount
+		return await checkBalance(id)
 	}
 }
 

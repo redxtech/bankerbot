@@ -3,6 +3,7 @@ import { CommandInteraction, SlashCommandBuilder } from 'discord.js'
 import logger from '@logger'
 
 import { checkBalance, transferBalance } from 'db'
+import config from '@config'
 
 export default {
 	data: new SlashCommandBuilder()
@@ -15,7 +16,11 @@ export default {
 				.setRequired(true)
 		)
 		.addNumberOption(option =>
-			option.setName('amount').setDescription('amount to pay').setRequired(true)
+			option
+				.setName('amount')
+				.setDescription('amount to pay')
+				.setMinValue(0)
+				.setRequired(true)
 		),
 	async execute(interaction: CommandInteraction) {
 		logger.info('Paying a user...')
@@ -32,10 +37,14 @@ export default {
 
 		if (transfer) {
 			await interaction.reply(
-				`Sent. Your balance is now ${await checkBalance(interaction.user.id)}.`
+				`Sent. You now have ${await checkBalance(
+					interaction.user.id
+				)} ${config.get('currency.name')}.`
 			)
 		} else {
-			await interaction.reply("Failed to send, you don't have enough money")
+			await interaction.reply(
+				`Failed to send. You don't have enough ${config.get('currency.name')}.`
+			)
 		}
 	},
 }

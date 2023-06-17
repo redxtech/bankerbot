@@ -7,6 +7,7 @@ import {
 import logger from '@logger'
 
 import { addBalance } from 'db'
+import config from '@config'
 
 export default {
 	data: new SlashCommandBuilder()
@@ -35,10 +36,14 @@ export default {
 		try {
 			const newBalance = await addBalance(recipient?.id, amount)
 			await interaction.reply(
-				`Handed out. ${recipient?.tag}'s balance is now ${newBalance}.`
+				`Handed out. ${recipient?.username} now has ${newBalance} ${config.get(
+					'currency.name'
+				)}.`
 			)
 		} catch (err) {
-			await interaction.reply("Failed to send, you don't have enough money")
+			await interaction.reply(
+				`Failed to send, you don't have enough ${config.get('currency.name')}.`
+			)
 		}
 	},
 }
