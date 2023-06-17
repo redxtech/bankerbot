@@ -10,6 +10,7 @@
 		"start": "node ./dist/main.js",
 		"build": "node build.mjs",
 		"dev": "tsx watch src/main.ts",
+		"deploy": "tsx src/deploy.ts",
 		"lint": "eslint src",
 		"lint:fix": "npm run lint -- --fix",
 		"prettier": "prettier src --check",

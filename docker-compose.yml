@@ -1,6 +1,6 @@
 version: '3.9'
 services:
-  pingbot:
+  bankerbot:
     build: ./
     container_name: bankerbot
     restart: unless-stopped

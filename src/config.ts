@@ -13,18 +13,21 @@ const config = convict({
 		format: String,
 		default: '',
 		env: 'TOKEN',
+		arg: 'token',
 	},
 	clientID: {
 		doc: 'Discord bot client ID',
 		format: String,
-		default: null,
+		default: '',
 		env: 'CLIENT_ID',
+		arg: 'client-id',
 	},
 	hostID: {
 		doc: "UUID of bot's host",
 		format: String,
 		default: null,
 		env: 'HOST_ID',
+		arg: 'host-id',
 	},
 	currency: {
 		name: {
