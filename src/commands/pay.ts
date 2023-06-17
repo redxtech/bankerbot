@@ -37,9 +37,11 @@ export default {
 
 		if (transfer) {
 			await interaction.reply(
-				`Sent. You now have ${await checkBalance(
-					interaction.user.id
-				)} ${config.get('currency.name')}.`
+				`Sent ${amount} to ${
+					recipient?.username
+				}. You now have ${await checkBalance(interaction.user.id)} ${config.get(
+					'currency.name'
+				)}.`
 			)
 		} else {
 			await interaction.reply(

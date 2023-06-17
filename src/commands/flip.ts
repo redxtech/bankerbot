@@ -42,7 +42,9 @@ export default {
 			if (choice === redOrBlack) {
 				const newBalance = await addBalance(interaction.user.id, bet)
 				await interaction.reply(
-					`You won! Your balance is now ${newBalance} (+${bet}).`
+					`You won! You now have ${newBalance} ${config.get(
+						'currency.name'
+					)} (+${bet}).`
 				)
 			} else {
 				const newBalance = await addBalance(interaction.user.id, -bet)
