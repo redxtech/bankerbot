@@ -18,13 +18,13 @@ export type Command = {
 	execute: (interaction: CommandInteraction) => Promise<void>
 }
 
-const client: Client & { commands?: Collection<string, Command> } = new Client({
+const client: Client & { commands?: Collection<string, unknown> } = new Client({
 	intents: [GatewayIntentBits.Guilds],
 })
 
 client.commands = new Collection()
 
-commands.forEach((command: Command) => {
+commands.forEach(command => {
 	if ('data' in command && 'execute' in command) {
 		client.commands?.set(command.data.name, command)
 	} else {

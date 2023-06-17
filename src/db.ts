@@ -33,7 +33,7 @@ export const checkBalance = async (id: Snowflake): Promise<number> => {
 
 // function to add money to a users balance
 export const addBalance = async (
-	id: Snowflake,
+	id: Snowflake | undefined,
 	amount: number
 ): Promise<number> => {
 	const user = await bank.findOne({ id })
@@ -47,9 +47,9 @@ export const addBalance = async (
 }
 
 // function to transfer money from one user to another
-export const transfer = async (
+export const transferBalance = async (
 	id1: Snowflake,
-	id2: Snowflake,
+	id2: Snowflake | undefined,
 	amount: number
 ): Promise<boolean> => {
 	const user1 = await bank.findOne({ id: id1 })

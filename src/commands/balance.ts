@@ -11,7 +11,7 @@ export default {
 	async execute(interaction: CommandInteraction) {
 		logger.info('Checking balance...')
 		await interaction.reply(
-			`Your balance is ${await checkBalance(interaction.user.id)}`
+			`Your balance is ${await checkBalance(interaction.user.id)}.`
 		)
 	},
 }
