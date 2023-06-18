@@ -1,7 +1,8 @@
 // utility functions
 
 // random number generator
-const random = (upTo: number): number => Math.floor(Math.random() * upTo) + 1
+export const random = (upTo: number): number =>
+	Math.floor(Math.random() * upTo) + 1
 
 // probability tester
 export const should = (outOf: number): boolean => random(outOf) === 1

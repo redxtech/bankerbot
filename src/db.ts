@@ -112,3 +112,28 @@ export const checkGambled = async (): Promise<number> => {
 		return gambleAmount.amount
 	}
 }
+
+// function to check the number of days since a user claimed their daily money
+export const checkDaily = async (id: Snowflake): Promise<number> => {
+	const user = await bank.findOne({ id })
+	if (!user) {
+		const daily = Date.now()
+		await bank.insertOne({ id, balance: 0, daily })
+		return daily
+	} else {
+		return user.daily
+	}
+}
+
+// function to update the last time a user claimed their daily money
+export const setDaily = async (id: Snowflake) => {
+	const user = await bank.findOne({ id })
+	const daily = Date.now()
+	if (!user) {
+		await bank.insertOne({ id, balance: 0, daily })
+		return daily
+	}
+	await bank.updateOne({ id }, { $set: { daily } })
+
+	return Date.now()
+}
