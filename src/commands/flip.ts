@@ -1,9 +1,14 @@
-import { CommandInteraction, SlashCommandBuilder } from 'discord.js'
+import {
+	CommandInteraction,
+	EmbedBuilder,
+	SlashCommandBuilder,
+} from 'discord.js'
 
 import logger from '@logger'
 
 import { addBalance, checkBalance } from 'db'
 import config from '@config'
+import { upCase } from 'utils'
 
 export default {
 	data: new SlashCommandBuilder()
@@ -35,25 +40,38 @@ export default {
 		const choice = interaction.options.getString('colour')
 
 		if (bet > balance) {
-			await interaction.reply("You don't have enough money to make that bet.")
+			await interaction.reply("Ha! You're too poor to make that bet.")
 			return
 		} else {
 			const redOrBlack = Math.random() < 0.5 ? 'red' : 'black'
-			if (choice === redOrBlack) {
-				const newBalance = await addBalance(interaction.user.id, bet)
-				await interaction.reply(
-					`You won! You now have ${newBalance} ${config.get(
-						'currency.name'
-					)} (+${bet}).`
+			const won = choice === redOrBlack
+			const newBalance = await addBalance(interaction.user.id, won ? bet : -bet)
+			const response = new EmbedBuilder()
+				.setColor(redOrBlack === 'red' ? 'Red' : 'NotQuiteBlack')
+				.setTitle(won ? 'You won!' : 'Ha! You lost!')
+				.setDescription(
+					`You bet ${bet} on ${choice} and the ball landed on ${redOrBlack}.`
 				)
-			} else {
-				const newBalance = await addBalance(interaction.user.id, -bet)
-				await interaction.reply(
-					`Ha! You lost. You now have ${newBalance} ${config.get(
-						'currency.name'
-					)} (-${bet}).`
+				.addFields(
+					{
+						name: 'Bet Amount',
+						value: `${bet} ${config.get('currency.name')}`,
+						inline: true,
+					},
+					{ name: 'Bet Colour', value: upCase(choice), inline: true },
+					{ name: 'Actual Colour', value: upCase(redOrBlack), inline: true },
+					{
+						name: 'New balance',
+						value: `${newBalance} ${config.get('currency.name')}`,
+						inline: true,
+					}
 				)
-			}
+				.setThumbnail(
+					won
+						? 'https://media.tenor.com/B85QfhcxFKMAAAAC/rat-spinning.gif'
+						: 'https://cdn.discordapp.com/attachments/1117852257157906492/1119782228407361696/ezgif.com-gif-maker.gif'
+				)
+			await interaction.reply({ embeds: [response] })
 		}
 	},
 }
