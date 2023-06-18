@@ -6,7 +6,7 @@ import {
 
 import logger from '@logger'
 
-import { addBalance, checkBalance } from 'db'
+import { addBalance, addGamble, checkBalance } from 'db'
 import config from '@config'
 import { upCase } from 'utils'
 
@@ -19,8 +19,8 @@ export default {
 				.setName('colour')
 				.setDescription('Bet on red or black')
 				.addChoices(
-					{ name: 'Red', value: 'red' },
-					{ name: 'Black', value: 'black' }
+					{ name: 'red', value: 'red' },
+					{ name: 'black', value: 'black' }
 				)
 				.setRequired(true)
 		)
@@ -72,6 +72,7 @@ export default {
 						: 'https://cdn.discordapp.com/attachments/1117852257157906492/1119782228407361696/ezgif.com-gif-maker.gif'
 				)
 			await interaction.reply({ embeds: [response] })
+			await addGamble(won ? bet : -bet)
 		}
 	},
 }

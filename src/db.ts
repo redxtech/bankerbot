@@ -19,6 +19,7 @@ const client = new MongoClient(connectURL)
 export const dbclient = client.connect().then(() => db) // workaround to wait for db connect
 const db = client.db(config.get('db.name'))
 const bank = db.collection('bank')
+const gamble = db.collection('gamble')
 
 // function to check a users balance
 export const checkBalance = async (id: Snowflake): Promise<number> => {
@@ -76,4 +77,27 @@ export const getLeaderboard = async (
 		.toArray()
 	// return only the top n entries
 	return leaderboard ? leaderboard.slice(0, amount || 10) : []
+}
+
+// function to keep track of how much money has been won by gambling
+export const addGamble = async (amount: number): Promise<number> => {
+	const gambleAmount = await gamble.findOne({ id: 'gamble' })
+	if (!gambleAmount) {
+		await gamble.insertOne({ id: 'gamble', amount })
+		return amount
+	} else {
+		await gamble.updateOne({ id: 'gamble' }, { $inc: { amount } })
+		return gambleAmount.amount + amount
+	}
+}
+
+// function to check how much money has been won by gambling
+export const checkGambled = async (): Promise<number> => {
+	const gambleAmount = await gamble.findOne({ id: 'gamble' })
+	if (!gambleAmount) {
+		await gamble.insertOne({ id: 'gamble', amount: 0 })
+		return 0
+	} else {
+		return gambleAmount.amount
+	}
 }

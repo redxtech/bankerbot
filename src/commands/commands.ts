@@ -4,5 +4,6 @@ import pay from './pay'
 import handout from './handout'
 import flip from './flip'
 import rich from './rich'
+import gambled from './gambled'
 
-export const commands = [ping, balance, pay, handout, flip, rich]
+export const commands = [ping, balance, pay, handout, flip, rich, gambled]

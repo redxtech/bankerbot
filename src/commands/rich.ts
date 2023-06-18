@@ -3,7 +3,7 @@ import { CommandInteraction, SlashCommandBuilder } from 'discord.js'
 import config from '@config'
 import logger from '@logger'
 
-import { checkBalance, getLeaderboard } from 'db'
+import { getLeaderboard } from 'db'
 
 export default {
 	data: new SlashCommandBuilder()
