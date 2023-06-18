@@ -19,7 +19,7 @@ export default {
 				.setDescription('user to give handout to')
 				.setRequired(true)
 		)
-		.addNumberOption(option =>
+		.addIntegerOption(option =>
 			option
 				.setName('amount')
 				.setDescription('amount to handout')

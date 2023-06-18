@@ -15,7 +15,7 @@ export default {
 				.setDescription('user to pay')
 				.setRequired(true)
 		)
-		.addNumberOption(option =>
+		.addIntegerOption(option =>
 			option
 				.setName('amount')
 				.setDescription('amount to pay')

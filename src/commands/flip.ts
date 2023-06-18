@@ -24,7 +24,7 @@ export default {
 				)
 				.setRequired(true)
 		)
-		.addNumberOption(option =>
+		.addIntegerOption(option =>
 			option
 				.setName('amount')
 				.setDescription('Amount to bet')
