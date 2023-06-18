@@ -62,6 +62,17 @@ export const transferBalance = async (
 	return true
 }
 
+// function to set a users balance
+export const setBalance = async (id: Snowflake, amount: number) => {
+	const user = await bank.findOne({ id })
+	if (!user) {
+		await bank.insertOne({ id, balance: amount })
+		return amount
+	}
+	await bank.updateOne({ id }, { $set: { balance: amount } })
+	return amount
+}
+
 type LeaderboardEntry = {
 	id: Snowflake
 	balance: number
