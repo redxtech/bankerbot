@@ -7,13 +7,12 @@ import {
 import config from '@config'
 import logger from '@logger'
 
-import { Command } from 'main'
 import { commands } from 'commands/commands'
 
 const deploy: RESTPostAPIChatInputApplicationCommandsJSONBody[] = []
 
 // Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
-commands.forEach((command: Command) => {
+commands.forEach(command => {
 	if ('data' in command && 'execute' in command) {
 		deploy.push(command.data.toJSON())
 	} else {
