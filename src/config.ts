@@ -44,6 +44,13 @@ const config = convict({
 			env: 'CURRENCY_DAILY',
 			arg: 'currency-daily',
 		},
+		interest: {
+			doc: 'Amount of interest to charge daily',
+			format: Number,
+			default: 0.05,
+			env: 'CURRENCY_INTEREST',
+			arg: 'currency-interest',
+		},
 		debt: {
 			doc: 'Max amount of currency that can be in debt',
 			format: Number,

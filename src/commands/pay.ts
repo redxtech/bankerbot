@@ -27,7 +27,7 @@ export default {
 
 		const recipient = interaction.options.getUser('recipient')
 		// @ts-expect-error it works
-		const amount = interaction.options.getNumber('amount')
+		const amount = interaction.options.getInteger('amount')
 
 		const transfer = await transferBalance(
 			interaction.user.id,

@@ -35,7 +35,7 @@ export default {
 		logger.info('Gambling: coin flip')
 		const balance = await checkBalance(interaction.user.id)
 		// @ts-expect-error it works
-		const bet = interaction.options.getNumber('amount') || 0
+		const bet = interaction.options.getInteger('amount') || 0
 		// @ts-expect-error it works
 		const choice = interaction.options.getString('colour')
 

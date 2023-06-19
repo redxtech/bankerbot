@@ -19,6 +19,7 @@ const client = new MongoClient(connectURL)
 export const dbclient = client.connect().then(() => db) // workaround to wait for db connect
 const db = client.db(config.get('db.name'))
 const bank = db.collection('bank')
+const loans = db.collection('loans')
 const gamble = db.collection('gamble')
 
 // function to check a users balance
@@ -76,6 +77,69 @@ export const setBalance = async (id: Snowflake, amount: number) => {
 type LeaderboardEntry = {
 	id: Snowflake
 	balance: number
+}
+
+// function to loan money to a user
+export const loanBalance = async (
+	lender: Snowflake,
+	borrower: Snowflake,
+	amount: number
+) => {
+	const user1 = await bank.findOne({ id: lender })
+	const user2 = await bank.findOne({ id: borrower })
+	if (!user1 || !user2) return false
+	if (user1.balance < amount) return false
+
+	// log the loan in the database
+	await loans.insertOne({
+		lender,
+		borrower,
+		amount,
+		date: Date.now(),
+	})
+
+	await bank.updateOne({ id: lender }, { $inc: { balance: -amount } })
+	await bank.updateOne({ id: borrower }, { $inc: { balance: amount } })
+	return true
+}
+
+const calculateInterest = (amount: number, date: Date) => {
+	const interest = config.get('currency.interest')
+	const days = (Date.now() - date.getTime()) / 1000 / 60 / 60 / 24
+	return Math.ceil(amount * (1 + interest) ** days)
+}
+
+// functuon to check the loans a user has
+export const checkLoans = async (id: Snowflake) => {
+	const loansList = await loans
+		.find({ $or: [{ borrower: id }, { lender: id }] })
+		.toArray()
+	return loansList
+}
+
+// function to check the loans a user has given
+export const checkLoansGiven = async (id: Snowflake) => {
+	const loansList = await loans.find({ lender: id }).toArray()
+	return loansList
+}
+
+// function to repay a loan
+export const repayLoan = async (borrower: Snowflake, lender: Snowflake) => {
+	const loan = await loans.findOne({ borrower, lender })
+	// get the loan from the database
+	if (!loan) return 0
+	const balance = await checkBalance(borrower)
+
+	const owed = calculateInterest(loan.amount, loan.date)
+
+	// check if the user has enough money to repay the loan
+	if (owed > balance) return 0
+
+	// repay the loan
+	await bank.updateOne({ id: borrower }, { $inc: { balance: -owed } })
+	await bank.updateOne({ id: lender }, { $inc: { balance: owed } })
+	await loans.deleteOne({ borrower, lender })
+	return owed
 }
 
 // function to get the leaderboard

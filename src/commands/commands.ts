@@ -8,6 +8,7 @@ import gambled from './gambled'
 import giveFreeMoney from './giveFreeMoney'
 import allIn from './allIn'
 import daily from './daily'
+import loan from './loan'
 
 export const commands = [
 	ping,
@@ -20,4 +21,5 @@ export const commands = [
 	giveFreeMoney,
 	allIn,
 	daily,
+	loan,
 ]
