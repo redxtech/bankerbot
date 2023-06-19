@@ -19,7 +19,7 @@ export default {
 			option
 				.setName('amount')
 				.setDescription('amount to pay')
-				.setMinValue(0)
+				.setMinValue(1)
 				.setRequired(true)
 		),
 	async execute(interaction: CommandInteraction) {

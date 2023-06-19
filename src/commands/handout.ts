@@ -23,6 +23,7 @@ export default {
 			option
 				.setName('amount')
 				.setDescription('amount to handout')
+				.setMinValue(1)
 				.setRequired(true)
 		)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),

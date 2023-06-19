@@ -29,6 +29,7 @@ export default {
 					option
 						.setName('amount')
 						.setDescription('amount of money to loan')
+						.setMinValue(1)
 						.setRequired(true)
 				)
 		)

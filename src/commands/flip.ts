@@ -28,7 +28,7 @@ export default {
 			option
 				.setName('amount')
 				.setDescription('Amount to bet')
-				.setMinValue(0)
+				.setMinValue(1)
 				.setRequired(true)
 		),
 	async execute(interaction: CommandInteraction) {
