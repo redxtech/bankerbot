@@ -103,7 +103,8 @@ export const loanBalance = async (
 	return true
 }
 
-const calculateInterest = (amount: number, date: Date) => {
+export const calculateInterest = (amount: number, date: Date) => {
+	date = new Date(date)
 	const interest = config.get('currency.interest')
 	const days = (Date.now() - date.getTime()) / 1000 / 60 / 60 / 24
 	return Math.ceil(amount * (1 + interest) ** days)

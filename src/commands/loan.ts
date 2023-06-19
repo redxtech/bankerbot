@@ -3,7 +3,13 @@ import { CommandInteraction, SlashCommandBuilder } from 'discord.js'
 import config from '@config'
 import logger from '@logger'
 
-import { checkBalance, checkLoans, loanBalance, repayLoan } from 'db'
+import {
+	calculateInterest,
+	checkBalance,
+	checkLoans,
+	loanBalance,
+	repayLoan,
+} from 'db'
 
 export default {
 	data: new SlashCommandBuilder()
@@ -41,13 +47,13 @@ export default {
 			sub.setName('check').setDescription('Check your loans')
 		),
 	async execute(interaction: CommandInteraction) {
-		logger.info('Managing loans...')
-
 		// @ts-expect-error it works
 		const subcommand = interaction.options.getSubcommand()
 
 		switch (subcommand) {
 			case 'create': {
+				logger.info('Creating loan...')
+
 				const borrower = interaction.options.getUser('borrower')
 				if (!borrower)
 					return await interaction.reply('You must specify a borrower')
@@ -72,12 +78,14 @@ export default {
 				}
 			}
 			case 'repay': {
+				logger.info('Repaying loan...')
+
 				const lender = interaction.options.getUser('lender')
 				if (!lender) return await interaction.reply('You must specify a lender')
-				const loan = await repayLoan(interaction.user.id, lender.id)
-				if (loan) {
+				const loanAmount = await repayLoan(interaction.user.id, lender.id)
+				if (loanAmount) {
 					return await interaction.reply(
-						`Sent ${loan} to ${
+						`Sent ${loanAmount} to ${
 							lender.username
 						}. You now have ${await checkBalance(
 							interaction.user.id
@@ -92,14 +100,20 @@ export default {
 				}
 			}
 			case 'check': {
+				logger.info('Checking loans...')
+
 				const loans = await checkLoans(interaction.user.id)
 				const loansWithUsers = await Promise.all(
 					loans.map(async loan => {
-						const user = await interaction.client.users.fetch(loan.lender)
+						const lenderUser = await interaction.client.users.fetch(loan.lender)
+						const borrowerUser = await interaction.client.users.fetch(
+							loan.borrower
+						)
 						return {
 							amount: loan.amount,
-							lender: user.username,
-							borrower: loan.borrower,
+							lender: lenderUser.username,
+							borrower: borrowerUser.username,
+							date: loan.date,
 						}
 					})
 				)
@@ -108,9 +122,9 @@ export default {
 						loansWithUsers
 							.map(
 								loan =>
-									`${loan.borrower} owes ${loan.amount} ${config.get(
-										'currency.name'
-									)} to ${loan.lender}`
+									`${loan.borrower} owes ${loan.amount} (+${
+										calculateInterest(loan.amount, loan.date) - loan.amount
+									}) ${config.get('currency.name')} to ${loan.lender}`
 							)
 							.join('\n') || 'You have no loans'
 					return await interaction.reply(displayLoans)
