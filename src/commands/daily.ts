@@ -22,9 +22,9 @@ export default {
 		const day = 1000 * 60 * 60 * 24
 		const days = Math.floor(diff / day)
 
-		// if it's been less than 24 hours since the last claim, return
-		// the time remaining
-		if (days < 1) {
+		// if the cooldown period isn't over, 
+		// return the time remaining.
+		if (days >= 0) {
 			const hours = Math.floor(diff / (1000 * 60 * 60))
 			const minutes = Math.floor((diff / (1000 * 60)) % 60)
 			const seconds = Math.floor((diff / 1000) % 60)
