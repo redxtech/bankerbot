@@ -16,20 +16,34 @@ export default {
 
 		// calculate time since last daily claim
 		const daily = new Date(await checkDaily(user.id))
-		const nextDaily = new Date(daily.getTime() + 86400000)
+		const day = 1000 * 60 * 60 * 24
+		const nextDaily = new Date(daily.getTime() + day)
 		const now = Date.now()
 		const diff = nextDaily.getTime() - now
-		const day = 1000 * 60 * 60 * 24
 		const days = Math.floor(diff / day)
 
-		// if the cooldown period isn't over, 
+		// if the cooldown period isn't over,
 		// return the time remaining.
 		if (days >= 0) {
-			const hours = Math.floor(diff / (1000 * 60 * 60))
-			const minutes = Math.floor((diff / (1000 * 60)) % 60)
-			const seconds = Math.floor((diff / 1000) % 60)
+			const parts: Record<string, number> = {
+				hour: Math.floor((diff / (1000 * 60 * 60)) % 24),
+				minute: Math.floor((diff / 1000 / 60) % 60),
+				second: Math.floor((diff / 1000) % 60),
+			}
+
+			const segments: Array<string> = []
+
+			for (const key in parts) {
+				const part = `${parts[key]} ${key + (parts[key] === 1 ? '' : 's')}`
+				if (parts[key]) {
+					segments.push(key === 'second' ? 'and ' + part : part)
+				}
+			}
+
 			await interaction.reply(
-				`Too soon, you fool! You can claim your daily money in ${hours} hours, ${minutes} minutes, and ${seconds} seconds.`
+				`Too soon, you fool! You can claim your daily money in ${segments.join(
+					', '
+				)}.`
 			)
 		} else {
 			// update the user's balance and last claim time
