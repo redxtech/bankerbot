@@ -6,44 +6,46 @@ import {
 
 import logger from '@logger'
 
-import { addBalance } from 'db'
+import { setBalance } from 'db'
 import config from '@config'
 
 export default {
 	data: new SlashCommandBuilder()
-		.setName('handout')
-		.setDescription('Gives a user some money')
+		.setName('set')
+		.setDescription("Set a user's balance")
 		.addUserOption(option =>
 			option
-				.setName('recipient')
-				.setDescription('user to give handout to')
+				.setName('victim')
+				.setDescription('user to set balance of')
 				.setRequired(true)
 		)
 		.addIntegerOption(option =>
 			option
 				.setName('amount')
-				.setDescription('amount to handout')
-				.setMinValue(1)
+				.setDescription('amount to set')
+				.setMinValue(0)
 				.setRequired(true)
 		)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
 	async execute(interaction: CommandInteraction) {
-		logger.info('Giving handout to a user...')
+		logger.info("Setting a user's balance...")
 
-		const recipient = interaction.options.getUser('recipient')
+		const recipient = interaction.options.getUser('victim')
 		// @ts-expect-error it works
 		const amount = interaction.options.getInteger('amount')
 
+		if (!recipient) return await interaction.reply('You must specify a victim')
+
 		try {
-			const newBalance = await addBalance(recipient?.id, amount)
+			const newBalance = await setBalance(recipient.id, amount)
 			await interaction.reply(
-				`Handed out. ${recipient?.username} now has ${newBalance} ${config.get(
+				`Set ${recipient?.username}'s balance to ${newBalance} ${config.get(
 					'currency.name'
 				)}.`
 			)
 		} catch (err) {
 			await interaction.reply(
-				`Failed to send, you don't have enough ${config.get('currency.name')}.`
+				"Failed to plan economy, you goofed! (I lied it was the bot's fault probably.)"
 			)
 		}
 	},
