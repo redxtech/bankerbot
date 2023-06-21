@@ -30,11 +30,11 @@ export default {
 	async execute(interaction: CommandInteraction) {
 		logger.info('Giving handout to a user...')
 
-		const recipient = interaction.options.getUser('recipient')
-		// @ts-expect-error it works
-		const amount = interaction.options.getInteger('amount')
-
 		try {
+			const recipient = interaction.options.getUser('recipient')
+			// @ts-expect-error it works
+			const amount = interaction.options.getInteger('amount')
+
 			const newBalance = await addBalance(recipient?.id, amount)
 			await interaction.reply(
 				`Handed out. ${recipient?.username} now has ${newBalance} ${config.get(
@@ -42,9 +42,9 @@ export default {
 				)}.`
 			)
 		} catch (err) {
-			await interaction.reply(
-				`Failed to send, you don't have enough ${config.get('currency.name')}.`
-			)
+			logger.error('Something went wrong giving handout.')
+			logger.error(err)
+			await interaction.reply('Failed to give handout, something went wrong.')
 		}
 	},
 }

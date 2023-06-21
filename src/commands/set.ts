@@ -30,20 +30,24 @@ export default {
 	async execute(interaction: CommandInteraction) {
 		logger.info("Setting a user's balance...")
 
-		const recipient = interaction.options.getUser('victim')
-		// @ts-expect-error it works
-		const amount = interaction.options.getInteger('amount')
-
-		if (!recipient) return await interaction.reply('You must specify a victim')
-
 		try {
+			const recipient = interaction.options.getUser('victim')
+			// @ts-expect-error it works
+			const amount = interaction.options.getInteger('amount')
+
+			if (!recipient)
+				return await interaction.reply('You must specify a victim')
+
 			const newBalance = await setBalance(recipient.id, amount)
+
 			await interaction.reply(
 				`Set ${recipient?.username}'s balance to ${newBalance} ${config.get(
 					'currency.name'
 				)}.`
 			)
 		} catch (err) {
+			logger.error('Something went wrong setting balance.')
+			logger.error(err)
 			await interaction.reply(
 				"Failed to plan economy, you goofed! (I lied it was the bot's fault probably.)"
 			)

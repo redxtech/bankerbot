@@ -12,25 +12,26 @@ export default {
 	async execute(interaction: CommandInteraction) {
 		logger.info('Giving free money to a user...')
 
-		const balance = await checkBalance(interaction.user.id)
+		try {
+			const balance = await checkBalance(interaction.user.id)
 
-		if (interaction.user.id === config.get('hostID')) {
+			if (interaction.user.id === config.get('hostID')) {
+				await interaction.reply(
+					`Free Money!!! Giving ${
+						interaction.user.username
+					} 1000 of free ${config.get('currency.name')}, for a total of ${
+						balance + 1000
+					} ${config.get('currency.name')}.`
+				)
+			} else {
+				await interaction.reply('You cannot receive free money.')
+			}
+		} catch (err) {
+			logger.error('Something went wrong giving out free money.')
+			logger.error(err)
 			await interaction.reply(
-				`Free Money!!! Giving ${
-					interaction.user.username
-				} 1000 of free ${config.get('currency.name')}, for a total of ${
-					balance + 1000
-				} ${config.get('currency.name')}.`
+				'Failed to give free money, something went wrong.'
 			)
-		} else {
-			await interaction.reply('You cannot receive free money.')
 		}
-		// try {
-		// const newBalance = await addBalance(interaction.user.id, 1000)
-		// } catch (err) {
-		// 	await interaction.reply(
-		// 		`Failed to send, you don't have enough ${config.get('currency.name')}.`
-		// 	)
-		// }
 	},
 }

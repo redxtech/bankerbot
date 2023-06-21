@@ -53,14 +53,14 @@ export const transferBalance = async (
 	id1: Snowflake,
 	id2: Snowflake | undefined,
 	amount: number
-): Promise<boolean> => {
+): Promise<number> => {
 	const user1 = await bank.findOne({ id: id1 })
 	const user2 = await bank.findOne({ id: id2 })
-	if (!user1 || !user2) return false
-	if (user1.balance < amount) return false
+	if (!user1 || !user2) throw Error('user not found')
+	if (user1.balance < amount) throw Error('insufficient funds')
 	await bank.updateOne({ id: id1 }, { $inc: { balance: -amount } })
 	await bank.updateOne({ id: id2 }, { $inc: { balance: amount } })
-	return true
+	return user1.balance - amount
 }
 
 // function to set a users balance
@@ -80,15 +80,15 @@ type LeaderboardEntry = {
 }
 
 // function to loan money to a user
-export const loanBalance = async (
+export const createLoan = async (
 	lender: Snowflake,
 	borrower: Snowflake,
 	amount: number
 ) => {
 	const user1 = await bank.findOne({ id: lender })
 	const user2 = await bank.findOne({ id: borrower })
-	if (!user1 || !user2) return false
-	if (user1.balance < amount) return false
+	if (!user1 || !user2) throw Error('user not found')
+	if (user1.balance < amount) throw Error('insufficient funds')
 
 	// log the loan in the database
 	await loans.insertOne({
@@ -100,7 +100,8 @@ export const loanBalance = async (
 
 	await bank.updateOne({ id: lender }, { $inc: { balance: -amount } })
 	await bank.updateOne({ id: borrower }, { $inc: { balance: amount } })
-	return true
+
+	return user1.balance - amount
 }
 
 export const calculateInterest = (amount: number, date: Date) => {

@@ -17,14 +17,22 @@ export default {
 		),
 	async execute(interaction: CommandInteraction) {
 		logger.info('Checking balance...')
-		const user = interaction.options.getUser('user') || interaction.user
-		const startOfSentence =
-			user.id === interaction.user.id ? 'You have' : `${user.username} has`
 
-		await interaction.reply(
-			`${startOfSentence} ${await checkBalance(user.id)} ${config.get(
-				'currency.name'
-			)}.`
-		)
+		try {
+			const user = interaction.options.getUser('user') || interaction.user
+			// TODO: switch to nickname
+			const startOfSentence =
+				user.id === interaction.user.id ? 'You have' : `${user.username} has`
+
+			await interaction.reply(
+				`${startOfSentence} ${await checkBalance(user.id)} ${config.get(
+					'currency.name'
+				)}.`
+			)
+		} catch (err) {
+			logger.error('Something went wrong checking balance.')
+			logger.error(err)
+			await interaction.reply('Failed to go all in, something went wrong.')
+		}
 	},
 }
