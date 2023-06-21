@@ -25,28 +25,32 @@ export default {
 	async execute(interaction: CommandInteraction) {
 		logger.info('Paying a user...')
 
-		const recipient = interaction.options.getUser('recipient')
-		// @ts-expect-error it works
-		const amount = interaction.options.getInteger('amount')
+		try {
+			const recipient = interaction.options.getUser('recipient')
+			// @ts-expect-error it works
+			const amount = interaction.options.getInteger('amount')
 
-		const transfer = await transferBalance(
-			interaction.user.id,
-			recipient?.id,
-			amount
-		)
+			if (amount > (await checkBalance(interaction.user.id))) {
+				return await interaction.reply(
+					'You are too poor to send that much money.'
+				)
+			}
 
-		if (transfer) {
+			const newBalance = await transferBalance(
+				interaction.user.id,
+				recipient?.id,
+				amount
+			)
+
 			await interaction.reply(
 				`Sent ${amount} to ${
 					recipient?.username
-				}. You now have ${await checkBalance(interaction.user.id)} ${config.get(
-					'currency.name'
-				)}.`
+				}. You now have ${newBalance} ${config.get('currency.name')}.`
 			)
-		} else {
-			await interaction.reply(
-				`Failed to send. You don't have enough ${config.get('currency.name')}.`
-			)
+		} catch (err) {
+			logger.error('Something went wrong paying user.')
+			logger.error(err)
+			await interaction.reply('Failed to pay user, something went wrong.')
 		}
 	},
 }

@@ -7,7 +7,7 @@ import {
 	calculateInterest,
 	checkBalance,
 	checkLoans,
-	loanBalance,
+	createLoan,
 	repayLoan,
 } from 'db'
 
@@ -61,7 +61,7 @@ export default {
 				// @ts-expect-error it works
 				const amount = interaction.options.getInteger('amount')
 
-				const loan = await loanBalance(interaction.user.id, borrower.id, amount)
+				const loan = await createLoan(interaction.user.id, borrower.id, amount)
 				if (loan) {
 					return await interaction.reply(
 						`Sent ${amount} to ${
@@ -134,31 +134,5 @@ export default {
 				}
 			}
 		}
-
-		// if (subcommand === 'create') {
-		// 	const borrower = interaction.options.getUser('borrower')
-		// 	// @ts-expect-error it works
-		// 	const amount = interaction.options.getInteger('amount')
-		// 	const loan = await transferBalance(
-		// 		interaction.user.id,
-		// 		borrower?.id,
-		// 		amount
-		// 	)
-		// 	if (loan) {
-		// 		await interaction.reply(
-		// 			`Sent ${amount} to ${
-		// 				borrower?.username
-		// 			}. You now have ${await checkBalance(
-		// 				interaction.user.id
-		// 			)} ${config.get('currency.name')}.`
-		// 		)
-		// 	} else {
-		// 		await interaction.reply(
-		// 			`Failed to send. You don't have enough ${config.get(
-		// 				'currency.name'
-		// 			)}.`
-		// 		)
-		// 	}
-		// }
 	},
 }
