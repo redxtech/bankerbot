@@ -31,13 +31,19 @@ export default {
 		logger.info('Giving handout to a user...')
 
 		try {
+			const guild = interaction.guild?.id
+			if (!guild) throw new Error('no guild found')
+
 			const recipient = interaction.options.getUser('recipient')
+
+			if (!recipient) throw new Error('no recipient found')
+
 			// @ts-expect-error it works
 			const amount = interaction.options.getInteger('amount')
 
-			const newBalance = await addBalance(recipient?.id, amount)
+			const newBalance = await addBalance(guild, recipient.id, amount)
 			await interaction.reply(
-				`Handed out. ${recipient?.username} now has ${newBalance} ${config.get(
+				`Handed out. ${recipient.username} now has ${newBalance} ${config.get(
 					'currency.name'
 				)}.`
 			)

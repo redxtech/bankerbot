@@ -51,6 +51,9 @@ export default {
 		// @ts-expect-error it works
 		const subcommand = interaction.options.getSubcommand()
 
+		const guild = interaction.guild?.id
+		if (!guild) throw new Error('no guild found')
+
 		switch (subcommand) {
 			case 'create': {
 				logger.info('Creating loan...')
@@ -67,7 +70,7 @@ export default {
 					// @ts-expect-error it works
 					const amount = interaction.options.getInteger('amount')
 
-					if (amount < checkBalance(interaction.user.id)) {
+					if (amount < checkBalance(guild, interaction.user.id)) {
 						return await interaction.reply(
 							`Failed to send. You don't have enough ${config.get(
 								'currency.name'
@@ -76,6 +79,7 @@ export default {
 					}
 
 					const newBalance = await createLoan(
+						guild,
 						interaction.user.id,
 						borrower.id,
 						amount
@@ -104,13 +108,18 @@ export default {
 					if (!lender)
 						return await interaction.reply('You must specify a lender')
 
-					const loanAmount = await repayLoan(interaction.user.id, lender.id)
+					const loanAmount = await repayLoan(
+						guild,
+						interaction.user.id,
+						lender.id
+					)
 
 					if (loanAmount) {
 						return await interaction.reply(
 							`Sent ${loanAmount} to ${
 								lender.username
 							}. You now have ${await checkBalance(
+								guild,
 								interaction.user.id
 							)} ${config.get('currency.name')}.`
 						)
@@ -132,7 +141,7 @@ export default {
 				logger.info('Checking loans...')
 
 				try {
-					const loans = await checkLoans(interaction.user.id)
+					const loans = await checkLoans(guild, interaction.user.id)
 
 					const loansWithUsers = await Promise.all(
 						loans.map(async loan => {

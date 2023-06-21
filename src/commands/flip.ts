@@ -4,10 +4,10 @@ import {
 	SlashCommandBuilder,
 } from 'discord.js'
 
+import config from '@config'
 import logger from '@logger'
 
 import { addBalance, addGamble, checkBalance } from 'db'
-import config from '@config'
 import { upCase } from 'utils'
 
 export default {
@@ -35,7 +35,10 @@ export default {
 		logger.info('Gambling: coin flip')
 
 		try {
-			const balance = await checkBalance(interaction.user.id)
+			const guild = interaction.guild?.id
+			if (!guild) throw new Error('no guild found')
+
+			const balance = await checkBalance(guild, interaction.user.id)
 			// @ts-expect-error it works
 			const bet = interaction.options.getInteger('amount') || 0
 			// @ts-expect-error it works
@@ -48,6 +51,7 @@ export default {
 				const redOrBlack = Math.random() < 0.5 ? 'red' : 'black'
 				const won = choice === redOrBlack
 				const newBalance = await addBalance(
+					guild,
 					interaction.user.id,
 					won ? bet : -bet
 				)
@@ -77,7 +81,7 @@ export default {
 							: 'https://cdn.discordapp.com/attachments/1117852257157906492/1119782228407361696/ezgif.com-gif-maker.gif'
 					)
 				await interaction.reply({ embeds: [response] })
-				await addGamble(won ? bet : -bet)
+				await addGamble(guild, won ? bet : -bet)
 			}
 		} catch (err) {
 			logger.error('Something went wrong flipping coin.')

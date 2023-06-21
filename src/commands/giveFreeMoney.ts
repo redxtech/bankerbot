@@ -13,7 +13,10 @@ export default {
 		logger.info('Giving free money to a user...')
 
 		try {
-			const balance = await checkBalance(interaction.user.id)
+			const guild = interaction.guild?.id
+			if (!guild) throw new Error('no guild found')
+
+			const balance = await checkBalance(guild, interaction.user.id)
 
 			if (interaction.user.id === config.get('hostID')) {
 				await interaction.reply(

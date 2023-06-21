@@ -31,6 +31,9 @@ export default {
 		logger.info("Setting a user's balance...")
 
 		try {
+			const guild = interaction.guild?.id
+			if (!guild) throw new Error('no guild found')
+
 			const recipient = interaction.options.getUser('victim')
 			// @ts-expect-error it works
 			const amount = interaction.options.getInteger('amount')
@@ -38,7 +41,7 @@ export default {
 			if (!recipient)
 				return await interaction.reply('You must specify a victim')
 
-			const newBalance = await setBalance(recipient.id, amount)
+			const newBalance = await setBalance(guild, recipient.id, amount)
 
 			await interaction.reply(
 				`Set ${recipient?.username}'s balance to ${newBalance} ${config.get(

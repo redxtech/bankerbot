@@ -13,7 +13,10 @@ export default {
 		logger.info('Checking gambled...')
 
 		try {
-			const amount = await checkGambled()
+			const guild = interaction.guild?.id
+			if (!guild) throw new Error('no guild found')
+
+			const amount = await checkGambled(guild)
 			await interaction.reply(
 				`${amount >= 0 ? amount : -amount} ${config.get(
 					'currency.name'

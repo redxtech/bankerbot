@@ -15,8 +15,11 @@ export default {
 		const amount = config.get('currency.daily')
 
 		try {
+			const guild = interaction.guild?.id
+			if (!guild) throw new Error('no guild found')
+
 			// calculate time since last daily claim
-			const daily = new Date(await checkDaily(user.id))
+			const daily = new Date(await checkDaily(guild, user.id))
 			const day = 1000 * 60 * 60 * 24
 			const nextDaily = new Date(daily.getTime() + day)
 			const now = Date.now()
@@ -48,8 +51,8 @@ export default {
 				)
 			} else {
 				// update the user's balance and last claim time
-				await addBalance(user.id, amount)
-				await setDaily(user.id)
+				await addBalance(guild, user.id, amount)
+				await setDaily(guild, user.id)
 				await interaction.reply(
 					`You have claimed your daily money of ${amount} ${config.get(
 						'currency.name'

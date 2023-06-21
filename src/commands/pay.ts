@@ -26,6 +26,9 @@ export default {
 		logger.info('Paying a user...')
 
 		try {
+			const guild = interaction.guild?.id
+			if (!guild) throw new Error('no guild found')
+
 			const recipient = interaction.options.getUser('recipient')
 			// @ts-expect-error it works
 			const amount = interaction.options.getInteger('amount')
@@ -38,13 +41,14 @@ export default {
 				return await interaction.reply('You cannot pay yourself.')
 			}
 
-			if (amount > (await checkBalance(interaction.user.id))) {
+			if (amount > (await checkBalance(guild, interaction.user.id))) {
 				return await interaction.reply(
 					'You are too poor to send that much money.'
 				)
 			}
 
 			const newBalance = await transferBalance(
+				guild,
 				interaction.user.id,
 				recipient.id,
 				amount

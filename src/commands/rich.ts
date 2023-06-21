@@ -13,7 +13,10 @@ export default {
 		logger.info('Checking top users...')
 
 		try {
-			const users = await getLeaderboard()
+			const guild = interaction.guild?.id
+			if (!guild) throw new Error('no guild found')
+
+			const users = await getLeaderboard(guild)
 
 			const fullUsers = await Promise.all(
 				users.map(async user => {

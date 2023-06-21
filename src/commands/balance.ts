@@ -19,13 +19,17 @@ export default {
 		logger.info('Checking balance...')
 
 		try {
+			const guild = interaction.guild?.id
+			if (!guild) throw new Error('no guild found')
+
 			const user = interaction.options.getUser('user') || interaction.user
+
 			// TODO: switch to nickname
 			const startOfSentence =
 				user.id === interaction.user.id ? 'You have' : `${user.username} has`
 
 			await interaction.reply(
-				`${startOfSentence} ${await checkBalance(user.id)} ${config.get(
+				`${startOfSentence} ${await checkBalance(guild, user.id)} ${config.get(
 					'currency.name'
 				)}.`
 			)

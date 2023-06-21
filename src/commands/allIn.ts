@@ -26,7 +26,10 @@ export default {
 		logger.info('Gambling: coin flip exponential')
 
 		try {
-			const balance = await checkBalance(interaction.user.id)
+			const guild = interaction.guild?.id
+			if (!guild) throw new Error('no guild found')
+
+			const balance = await checkBalance(guild, interaction.user.id)
 			// @ts-expect-error it works
 			const choice = interaction.options.getInteger('number')
 
@@ -36,8 +39,8 @@ export default {
 			const newBalance = won ? balance ** 2 : Math.floor(Math.sqrt(balance))
 			const diff = newBalance - balance
 
-			await setBalance(interaction.user.id, newBalance)
-			await addGamble(diff)
+			await setBalance(guild, interaction.user.id, newBalance)
+			await addGamble(guild, diff)
 
 			const response = new EmbedBuilder()
 				.setColor(won ? 'Green' : 'Red')
