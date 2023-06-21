@@ -2,6 +2,7 @@ import {
 	CommandInteraction,
 	PermissionFlagsBits,
 	SlashCommandBuilder,
+	userMention,
 } from 'discord.js'
 
 import logger from '@logger'
@@ -44,9 +45,9 @@ export default {
 			const newBalance = await setBalance(guild, recipient.id, amount)
 
 			await interaction.reply(
-				`Set ${recipient?.username}'s balance to ${newBalance} ${config.get(
-					'currency.name'
-				)}.`
+				`Set ${userMention(
+					recipient.id
+				)}'s balance to ${newBalance} ${config.get('currency.name')}.`
 			)
 		} catch (err) {
 			logger.error('Something went wrong setting balance.')

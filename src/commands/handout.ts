@@ -2,6 +2,7 @@ import {
 	CommandInteraction,
 	PermissionFlagsBits,
 	SlashCommandBuilder,
+	userMention,
 } from 'discord.js'
 
 import logger from '@logger'
@@ -43,9 +44,9 @@ export default {
 
 			const newBalance = await addBalance(guild, recipient.id, amount)
 			await interaction.reply(
-				`Handed out. ${recipient.username} now has ${newBalance} ${config.get(
-					'currency.name'
-				)}.`
+				`Handed out. ${userMention(
+					recipient.id
+				)} now has ${newBalance} ${config.get('currency.name')}.`
 			)
 		} catch (err) {
 			logger.error('Something went wrong giving handout.')

@@ -1,4 +1,8 @@
-import { CommandInteraction, SlashCommandBuilder } from 'discord.js'
+import {
+	CommandInteraction,
+	SlashCommandBuilder,
+	userMention,
+} from 'discord.js'
 
 import config from '@config'
 import logger from '@logger'
@@ -26,7 +30,9 @@ export default {
 
 			// TODO: switch to nickname
 			const startOfSentence =
-				user.id === interaction.user.id ? 'You have' : `${user.username} has`
+				user.id === interaction.user.id
+					? 'You have'
+					: `${userMention(user.id)} has`
 
 			await interaction.reply(
 				`${startOfSentence} ${await checkBalance(guild, user.id)} ${config.get(

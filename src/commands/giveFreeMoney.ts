@@ -1,4 +1,8 @@
-import { CommandInteraction, SlashCommandBuilder } from 'discord.js'
+import {
+	CommandInteraction,
+	SlashCommandBuilder,
+	userMention,
+} from 'discord.js'
 
 import logger from '@logger'
 
@@ -20,9 +24,9 @@ export default {
 
 			if (interaction.user.id === config.get('hostID')) {
 				await interaction.reply(
-					`Free Money!!! Giving ${
-						interaction.user.username
-					} 1000 of free ${config.get('currency.name')}, for a total of ${
+					`Free Money!!! Giving ${userMention(
+						interaction.user.id
+					)} 1000 of free ${config.get('currency.name')}, for a total of ${
 						balance + 1000
 					} ${config.get('currency.name')}.`
 				)

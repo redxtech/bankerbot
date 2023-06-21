@@ -1,4 +1,8 @@
-import { CommandInteraction, SlashCommandBuilder } from 'discord.js'
+import {
+	CommandInteraction,
+	SlashCommandBuilder,
+	userMention,
+} from 'discord.js'
 
 import logger from '@logger'
 
@@ -55,9 +59,9 @@ export default {
 			)
 
 			await interaction.reply(
-				`Sent ${amount} to ${
-					recipient.username
-				}. You now have ${newBalance} ${config.get('currency.name')}.`
+				`Sent ${amount} to ${userMention(
+					recipient.id
+				)}. You now have ${newBalance} ${config.get('currency.name')}.`
 			)
 		} catch (err) {
 			logger.error('Something went wrong paying user.')

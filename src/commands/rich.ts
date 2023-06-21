@@ -1,4 +1,8 @@
-import { CommandInteraction, SlashCommandBuilder } from 'discord.js'
+import {
+	CommandInteraction,
+	SlashCommandBuilder,
+	userMention,
+} from 'discord.js'
 
 import config from '@config'
 import logger from '@logger'
@@ -20,15 +24,14 @@ export default {
 
 			const fullUsers = await Promise.all(
 				users.map(async user => {
-					const { username } = await interaction.client.users.fetch(user.id)
-					return { ...user, username }
+					return { ...user, mention: userMention(user.id) }
 				})
 			)
 
 			// format the leaderboard
 			const leaderboard = fullUsers
 				.map((user, index) => {
-					return `${index + 1}. ${user.username} - ${user.balance} ${config.get(
+					return `${index + 1}. ${user.mention} - ${user.balance} ${config.get(
 						'currency.name'
 					)}`
 				})
