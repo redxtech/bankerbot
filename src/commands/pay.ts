@@ -30,6 +30,14 @@ export default {
 			// @ts-expect-error it works
 			const amount = interaction.options.getInteger('amount')
 
+			if (!recipient) {
+				return await interaction.reply('You must specify a recipient.')
+			}
+
+			if (recipient?.id === interaction.user.id) {
+				return await interaction.reply('You cannot pay yourself.')
+			}
+
 			if (amount > (await checkBalance(interaction.user.id))) {
 				return await interaction.reply(
 					'You are too poor to send that much money.'
@@ -38,13 +46,13 @@ export default {
 
 			const newBalance = await transferBalance(
 				interaction.user.id,
-				recipient?.id,
+				recipient.id,
 				amount
 			)
 
 			await interaction.reply(
 				`Sent ${amount} to ${
-					recipient?.username
+					recipient.username
 				}. You now have ${newBalance} ${config.get('currency.name')}.`
 			)
 		} catch (err) {

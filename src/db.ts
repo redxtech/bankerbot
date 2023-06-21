@@ -51,7 +51,7 @@ export const addBalance = async (
 // function to transfer money from one user to another
 export const transferBalance = async (
 	id1: Snowflake,
-	id2: Snowflake | undefined,
+	id2: Snowflake,
 	amount: number
 ): Promise<number> => {
 	const user1 = await bank.findOne({ id: id1 })

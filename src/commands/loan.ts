@@ -60,6 +60,10 @@ export default {
 					if (!borrower)
 						return await interaction.reply('You must specify a borrower')
 
+					if (borrower?.id === interaction.user.id) {
+						return await interaction.reply('You cannot loan yourself money.')
+					}
+
 					// @ts-expect-error it works
 					const amount = interaction.options.getInteger('amount')
 
