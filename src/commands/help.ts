@@ -22,9 +22,20 @@ export default {
 			.setThumbnail('https://i.imgur.com/rKmmUrc.png')
 
 		for (const command of commands) {
+			const description = `Description: *${command.data.description}*`
+
+			const options = command.data.options?.map(
+				// @ts-expect-error it works
+				option => `${option.name} - ${option.description}`
+			)
+
+			const value = options?.length
+				? `${description}\nOptions: *${options.join(', ')}*`
+				: description
+
 			messageEmbed.addFields({
 				name: `\`/${command.data.name}\``,
-				value: command.data.description,
+				value,
 			})
 		}
 
