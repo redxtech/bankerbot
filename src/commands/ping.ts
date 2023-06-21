@@ -3,6 +3,7 @@ import {
 	ButtonBuilder,
 	ButtonStyle,
 	CommandInteraction,
+	EmbedBuilder,
 	Interaction,
 	SlashCommandBuilder,
 } from 'discord.js'
@@ -16,28 +17,11 @@ export default {
 	async execute(interaction: CommandInteraction) {
 		logger.info('Ping pong!')
 
-		const pingButton = new ButtonBuilder()
-			.setCustomId('ping')
-			.setLabel('ping')
-			.setStyle(ButtonStyle.Primary)
+		const embed = new EmbedBuilder()
+			.setTitle('Ping')
+			.setDescription('Pong!')
+			.setColor('Blue')
 
-		const row = new ActionRowBuilder<ButtonBuilder>().addComponents(pingButton)
-
-		const filter = (i: Interaction) =>
-			// @ts-expect-error it works
-			i.customId === 'ping' && i.user.id === interaction.user.id
-
-		const collector = interaction.channel?.createMessageComponentCollector({
-			filter,
-			time: 15000,
-		})
-
-		if (!collector) throw new Error('no collector found')
-
-		collector.on('collect', async i => {
-			await i.update({ content: 'Ping ping!', components: [] })
-		})
-
-		await interaction.reply({ content: 'Pong!', components: [row] })
+		await interaction.reply({ embeds: [embed] })
 	},
 }

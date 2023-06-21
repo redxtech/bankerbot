@@ -1,5 +1,6 @@
 import {
 	CommandInteraction,
+	EmbedBuilder,
 	PermissionFlagsBits,
 	SlashCommandBuilder,
 	userMention,
@@ -40,15 +41,27 @@ export default {
 			const amount = interaction.options.getInteger('amount')
 
 			if (!recipient)
-				return await interaction.reply('You must specify a victim')
+				return await interaction.reply({
+					embeds: [
+						new EmbedBuilder()
+							.setTitle('Set Balance')
+							.setDescription('You must specify a victim')
+							.setColor('Red'),
+					],
+				})
 
 			const newBalance = await setBalance(guild, recipient.id, amount)
 
-			await interaction.reply(
-				`Set ${userMention(
-					recipient.id
-				)}'s balance to ${newBalance} ${config.get('currency.name')}.`
-			)
+			const message = `Set ${userMention(
+				recipient.id
+			)}'s balance to ${newBalance} ${config.get('currency.name')}.`
+
+			const embed = new EmbedBuilder()
+				.setTitle('Assign Balance')
+				.setDescription(message)
+				.setColor('Green')
+
+			await interaction.reply({ embeds: [embed] })
 		} catch (err) {
 			logger.error('Something went wrong setting balance.')
 			logger.error(err)

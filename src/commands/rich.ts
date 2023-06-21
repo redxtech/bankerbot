@@ -1,5 +1,6 @@
 import {
 	CommandInteraction,
+	EmbedBuilder,
 	SlashCommandBuilder,
 	userMention,
 } from 'discord.js'
@@ -37,7 +38,12 @@ export default {
 				})
 				.join('\n')
 
-			await interaction.reply(leaderboard)
+			const embed = new EmbedBuilder()
+				.setTitle('Richest Users')
+				.setDescription(leaderboard)
+				.setColor('Blue')
+
+			await interaction.reply({ embeds: [embed] })
 		} catch (err) {
 			logger.error('Something went wrong checking rich people.')
 			logger.error(err)

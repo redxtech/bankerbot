@@ -1,4 +1,8 @@
-import { CommandInteraction, SlashCommandBuilder } from 'discord.js'
+import {
+	CommandInteraction,
+	EmbedBuilder,
+	SlashCommandBuilder,
+} from 'discord.js'
 
 import config from '@config'
 import logger from '@logger'
@@ -17,11 +21,16 @@ export default {
 			if (!guild) throw new Error('no guild found')
 
 			const amount = await checkGambled(guild)
-			await interaction.reply(
-				`${amount >= 0 ? amount : -amount} ${config.get(
-					'currency.name'
-				)} has been ${amount >= 0 ? 'won' : 'lost'} from gambling.`
-			)
+			const message = `${amount >= 0 ? amount : -amount} ${config.get(
+				'currency.name'
+			)} has been ${amount >= 0 ? 'won' : 'lost'} from gambling.`
+
+			const embed = new EmbedBuilder()
+				.setDescription('Amount Gambled')
+				.setDescription(message)
+				.setColor(amount >= 0 ? 'Green' : 'Red')
+
+			await interaction.reply({ embeds: [embed] })
 		} catch (err) {
 			logger.error('Something went wrong checking gambled.')
 			logger.error(err)

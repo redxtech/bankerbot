@@ -1,5 +1,6 @@
 import {
 	CommandInteraction,
+	EmbedBuilder,
 	PermissionFlagsBits,
 	SlashCommandBuilder,
 	userMention,
@@ -43,11 +44,17 @@ export default {
 			const amount = interaction.options.getInteger('amount')
 
 			const newBalance = await addBalance(guild, recipient.id, amount)
-			await interaction.reply(
-				`Handed out. ${userMention(
-					recipient.id
-				)} now has ${newBalance} ${config.get('currency.name')}.`
-			)
+
+			const message = `Handed out. ${userMention(
+				recipient.id
+			)} now has ${newBalance} ${config.get('currency.name')}.`
+
+			const embed = new EmbedBuilder()
+				.setTitle('Handouts')
+				.setDescription(message)
+				.setColor('Green')
+
+			await interaction.reply({ embeds: [embed] })
 		} catch (err) {
 			logger.error('Something went wrong giving handout.')
 			logger.error(err)

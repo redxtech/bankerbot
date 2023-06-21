@@ -1,4 +1,8 @@
-import { CommandInteraction, SlashCommandBuilder } from 'discord.js'
+import {
+	CommandInteraction,
+	EmbedBuilder,
+	SlashCommandBuilder,
+} from 'discord.js'
 
 import logger from '@logger'
 import config from '@config'
@@ -44,20 +48,31 @@ export default {
 					}
 				}
 
-				await interaction.reply(
-					`Too soon, you fool! You can claim your daily money in ${segments.join(
-						', '
-					)}.`
-				)
+				const countdown = segments.join(', ')
+
+				const embed = new EmbedBuilder()
+					.setTitle('Daily Claim')
+					.setDescription(
+						`Too soon, you fool! You can claim your daily money in ${countdown}.`
+					)
+					.setColor('Red')
+
+				await interaction.reply({ embeds: [embed] })
 			} else {
 				// update the user's balance and last claim time
 				await addBalance(guild, user.id, amount)
 				await setDaily(guild, user.id)
-				await interaction.reply(
-					`You have claimed your daily money of ${amount} ${config.get(
-						'currency.name'
-					)}!`
-				)
+
+				const embed = new EmbedBuilder()
+					.setTitle('Daily Claim')
+					.setDescription(
+						`You have claimed your daily money of ${amount} ${config.get(
+							'currency.name'
+						)}!`
+					)
+					.setColor('Green')
+
+				await interaction.reply({ embeds: [embed] })
 			}
 		} catch (err) {
 			logger.error('Something went wrong claiming daily.')

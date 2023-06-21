@@ -1,5 +1,6 @@
 import {
 	CommandInteraction,
+	EmbedBuilder,
 	SlashCommandBuilder,
 	userMention,
 } from 'discord.js'
@@ -34,11 +35,16 @@ export default {
 					? 'You have'
 					: `${userMention(user.id)} has`
 
-			await interaction.reply(
-				`${startOfSentence} ${await checkBalance(guild, user.id)} ${config.get(
-					'currency.name'
-				)}.`
-			)
+			const balance = await checkBalance(guild, user.id)
+
+			const embed = new EmbedBuilder()
+				.setTitle('Balance')
+				.setDescription(
+					`${startOfSentence} ${balance} ${config.get('currency.name')}.`
+				)
+				.setColor('Blue')
+
+			await interaction.reply({ embeds: [embed] })
 		} catch (err) {
 			logger.error('Something went wrong checking balance.')
 			logger.error(err)
