@@ -8,7 +8,7 @@ import config from '@config'
 export default {
 	data: new SlashCommandBuilder()
 		.setName('pay')
-		.setDescription('Pays a user a certain amount of money')
+		.setDescription('pays a user a certain amount of money.')
 		.addUserOption(option =>
 			option
 				.setName('recipient')

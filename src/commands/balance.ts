@@ -8,7 +8,7 @@ import { checkBalance } from 'db'
 export default {
 	data: new SlashCommandBuilder()
 		.setName('bal')
-		.setDescription('Checks your balance')
+		.setDescription('checks your balance.')
 		.addUserOption(option =>
 			option
 				.setName('user')

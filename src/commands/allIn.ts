@@ -13,11 +13,11 @@ import { random } from 'utils'
 export default {
 	data: new SlashCommandBuilder()
 		.setName('all-in')
-		.setDescription('Flips a coin, you can bet on it (whole balance only).')
+		.setDescription('flips a coin, you can bet on it (whole balance only).')
 		.addIntegerOption(option =>
 			option
 				.setName('number')
-				.setDescription('Number to bet on')
+				.setDescription('number to bet on')
 				.setMinValue(0)
 				.setMaxValue(10)
 				.setRequired(true)

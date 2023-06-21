@@ -12,7 +12,7 @@ import config from '@config'
 export default {
 	data: new SlashCommandBuilder()
 		.setName('handout')
-		.setDescription('Gives a user some money')
+		.setDescription('gives a user some money.')
 		.addUserOption(option =>
 			option
 				.setName('recipient')

@@ -7,7 +7,7 @@ import { addBalance, checkDaily, setDaily } from 'db'
 export default {
 	data: new SlashCommandBuilder()
 		.setName('daily')
-		.setDescription('Claims your daily money'),
+		.setDescription('claims your daily money.'),
 	async execute(interaction: CommandInteraction) {
 		logger.info('Claiming daily money')
 		const user = interaction.user

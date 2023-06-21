@@ -13,11 +13,11 @@ import { upCase } from 'utils'
 export default {
 	data: new SlashCommandBuilder()
 		.setName('flip')
-		.setDescription('Flips a coin, you can bet on it.')
+		.setDescription('flips a coin, you can bet on it.')
 		.addStringOption(option =>
 			option
 				.setName('colour')
-				.setDescription('Bet on red or black')
+				.setDescription('bet on red or black')
 				.addChoices(
 					{ name: 'red', value: 'red' },
 					{ name: 'black', value: 'black' }
@@ -27,7 +27,7 @@ export default {
 		.addIntegerOption(option =>
 			option
 				.setName('amount')
-				.setDescription('Amount to bet')
+				.setDescription('amount to bet')
 				.setMinValue(1)
 				.setRequired(true)
 		),

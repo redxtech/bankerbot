@@ -8,7 +8,7 @@ import config from '@config'
 export default {
 	data: new SlashCommandBuilder()
 		.setName('givefreemoney')
-		.setDescription('Gives you some money'),
+		.setDescription('gives you some free money.'),
 	async execute(interaction: CommandInteraction) {
 		logger.info('Giving free money to a user...')
 

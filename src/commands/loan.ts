@@ -14,11 +14,11 @@ import {
 export default {
 	data: new SlashCommandBuilder()
 		.setName('loan')
-		.setDescription('Manager loans')
+		.setDescription('manage your loans.')
 		.addSubcommand(sub =>
 			sub
 				.setName('create')
-				.setDescription('Create a loan')
+				.setDescription('create a loan')
 				.addUserOption(option =>
 					option
 						.setName('borrower')
@@ -36,7 +36,7 @@ export default {
 		.addSubcommand(sub =>
 			sub
 				.setName('repay')
-				.setDescription('Repay a loan')
+				.setDescription('repay a loan')
 				.addUserOption(option =>
 					option
 						.setName('lender')
@@ -45,7 +45,7 @@ export default {
 				)
 		)
 		.addSubcommand(sub =>
-			sub.setName('check').setDescription('Check your loans')
+			sub.setName('check').setDescription('check your loans')
 		),
 	async execute(interaction: CommandInteraction) {
 		// @ts-expect-error it works

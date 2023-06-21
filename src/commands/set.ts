@@ -12,7 +12,7 @@ import config from '@config'
 export default {
 	data: new SlashCommandBuilder()
 		.setName('set')
-		.setDescription("Set a user's balance")
+		.setDescription("set a user's balance.")
 		.addUserOption(option =>
 			option
 				.setName('victim')

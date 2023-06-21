@@ -8,7 +8,7 @@ import { checkGambled } from 'db'
 export default {
 	data: new SlashCommandBuilder()
 		.setName('gambled')
-		.setDescription('Shows how much has been won/lost from gambling'),
+		.setDescription('shows how much has been won/lost from gambling.'),
 	async execute(interaction: CommandInteraction) {
 		logger.info('Checking gambled...')
 

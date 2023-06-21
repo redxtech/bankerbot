@@ -11,7 +11,7 @@ import { commands } from './commands'
 export default {
 	data: new SlashCommandBuilder()
 		.setName('help')
-		.setDescription('shows help menu'),
+		.setDescription('shows help menu.'),
 	async execute(interaction: CommandInteraction) {
 		logger.info('Showing help')
 
@@ -26,7 +26,7 @@ export default {
 
 			const options = command.data.options?.map(
 				// @ts-expect-error it works
-				option => `${option.name} - ${option.description}`
+				option => `${option.name} -> ${option.description}`
 			)
 
 			const value = options?.length

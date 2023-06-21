@@ -8,7 +8,7 @@ import { getLeaderboard } from 'db'
 export default {
 	data: new SlashCommandBuilder()
 		.setName('rich')
-		.setDescription('Gets the richest users'),
+		.setDescription('gets the richest users.'),
 	async execute(interaction: CommandInteraction) {
 		logger.info('Checking top users...')
 
