@@ -10,6 +10,7 @@ import allIn from './allIn'
 import daily from './daily'
 import loan from './loan'
 import set from './set'
+import help from './help'
 
 export const commands = [
 	ping,
@@ -24,4 +25,5 @@ export const commands = [
 	daily,
 	loan,
 	set,
+	help,
 ]
