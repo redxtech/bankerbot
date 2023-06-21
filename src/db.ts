@@ -142,6 +142,26 @@ export const calculateInterest = (amount: number, date: Date) => {
 	return Math.ceil(amount * (1 + interest) ** days)
 }
 
+export const calculateCompoundInterest = (
+	principal: number,
+	ratePerDay: number,
+	loanTimestamp: number
+) => {
+	// convert the rate to a decimal
+	const rate = ratePerDay / 100
+
+	// calculate the time in days since the loan was taken out
+	const now = Date.now()
+	const timeElapsedInMilliseconds = now - loanTimestamp
+	const timeElapsedInDays = timeElapsedInMilliseconds / (1000 * 60 * 60 * 24)
+
+	// calculate the amount of interest
+	const amount = principal * Math.exp(rate * timeElapsedInDays)
+
+	// return the interest accrued
+	return amount - principal
+}
+
 // functuon to check the loans a user has
 export const checkLoans = async (guild: Snowflake, id: Snowflake) => {
 	// get the loans from the database and return them
